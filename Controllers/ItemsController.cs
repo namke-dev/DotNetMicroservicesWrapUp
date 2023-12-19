@@ -70,7 +70,7 @@ namespace Play.Catalog.Service.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<ItemDto>> DeleteAsync(Guid id)
         {
             var targetItem = await itemRepository.GetAsync(id);
