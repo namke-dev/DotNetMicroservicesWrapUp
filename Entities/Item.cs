@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Play.Catalog.Service.Entities
 {
-    public class Item
+    public class Item : IEntity
     {
         // Guid Id, string Name, string Description, decimal Price, DateTimeOffset CreateDate
         public Guid Id { get; set; }
