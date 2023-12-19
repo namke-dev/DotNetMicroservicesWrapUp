@@ -33,7 +33,7 @@ namespace Play.Catalog.Service.Repositories
             return await dbCollection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task Create(Item item)
+        public async Task CreateAsync(Item item)
         {
             if (item is null)
             {
@@ -43,7 +43,7 @@ namespace Play.Catalog.Service.Repositories
             await dbCollection.InsertOneAsync(item);
         }
 
-        public async Task Update(Item item)
+        public async Task UpdateAsync(Item item)
         {
             if (item is null)
             {
