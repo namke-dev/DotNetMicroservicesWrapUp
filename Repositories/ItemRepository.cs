@@ -1,25 +1,21 @@
-
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using Play.Catalog.Service.Dtos;
 using Play.Catalog.Service.Entities;
 
 namespace Play.Catalog.Service.Repositories
 {
-    public class ItemRepository
+    public class ItemsRepository : IItemsRepository
     {
         private const string colectionName = "items";
         private readonly IMongoCollection<Item> dbCollection;
-
         private readonly FilterDefinitionBuilder<Item> filterBuilder = Builders<Item>.Filter;
-        public ItemRepository()
+        public ItemsRepository(IMongoDatabase mongoDatabase)
         {
-            var mongoClient = new MongoClient("mongodb://localhost:27017");
-            var database = mongoClient.GetDatabase("Catalog");
-            dbCollection = database.GetCollection<Item>(colectionName);
+            // var mongoClient = new MongoClient("mongodb://localhost:27017");
+            // var database = mongoClient.GetDatabase("Catalog");
+            dbCollection = mongoDatabase.GetCollection<Item>(colectionName);
         }
 
         public async Task<IReadOnlyCollection<Item>> GetAllAsync()
@@ -54,7 +50,7 @@ namespace Play.Catalog.Service.Repositories
             await dbCollection.ReplaceOneAsync(filter, item);
         }
 
-        public async Task RemoveAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var filter = filterBuilder.Eq(i => i.Id, id);
             await dbCollection.DeleteOneAsync(filter);
