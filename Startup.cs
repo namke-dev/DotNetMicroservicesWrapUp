@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Play.Catalog.Service.Entities;
 using Play.Catalog.Service.Settings;
+using Play.Common.MassTransit;
 using Play.Common.MongoDb;
 using Play.Common.Setting;
 
@@ -30,15 +31,7 @@ namespace Play.Catalog.Service
 
             services.AddMongoDbServices().AddMongoRepository<Item>("items");
 
-            services.AddMassTransit(x =>
-            {
-                x.UsingRabbitMq((context, configurator) =>
-                {
-                    var rabbitMqSettings = Configuration.GetSection(nameof(RabbitMqSettings)).Get<RabbitMqSettings>();
-                    configurator.Host(rabbitMqSettings.Host);
-                    configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
-                });
-            });
+            services.AddMassTransitWithRabbitMq();
 
             services.AddControllers(options =>
             {
