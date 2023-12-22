@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using Play.Catalog.Contracts;
 using Play.Catalog.Service.Dtos;
 using Play.Catalog.Service.Entities;
 using Play.Common;
+
 
 namespace Play.Catalog.Service.Controllers
 {
@@ -15,9 +17,11 @@ namespace Play.Catalog.Service.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IRepository<Item> itemsRepository;
-        public ItemsController(IRepository<Item> itemsRepository)
+        private readonly IPublishEndpoint publishEndpoint;
+        public ItemsController(IRepository<Item> itemsRepository, IPublishEndpoint publishEndpoint)
         {
             this.itemsRepository = itemsRepository;
+            this.publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -49,6 +53,9 @@ namespace Play.Catalog.Service.Controllers
                 CreateDate = DateTimeOffset.UtcNow
             };
             await itemsRepository.CreateAsync(item);
+
+            await publishEndpoint.Publish(new CatalogItemCreated(item.Id, item.Name, item.Description));
+
             //item.Id property is set during the database insertion process
             return CreatedAtAction(nameof(GetByIdAsync), new { id = item.Id }, item);
         }
@@ -71,6 +78,7 @@ namespace Play.Catalog.Service.Controllers
                 CreateDate = targetItem.CreateDate
             };
             await itemsRepository.UpdateAsync(newItem);
+            await publishEndpoint.Publish(new CatalogItemUpdated(newItem.Id, newItem.Name, newItem.Description));
             return NoContent();
         }
 
@@ -84,6 +92,8 @@ namespace Play.Catalog.Service.Controllers
             }
 
             await itemsRepository.DeleteAsync(id);
+            await publishEndpoint.Publish(new CatalogItemDeleted(id));
+
             return NoContent();
         }
     }
