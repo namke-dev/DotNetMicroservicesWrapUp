@@ -17,6 +17,7 @@ namespace Play.Catalog.Service.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IRepository<Item> itemsRepository;
+        // this pushlish enpoint will handle exchange message
         private readonly IPublishEndpoint publishEndpoint;
         public ItemsController(IRepository<Item> itemsRepository, IPublishEndpoint publishEndpoint)
         {
