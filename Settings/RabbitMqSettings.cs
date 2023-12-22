@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Play.Catalog.Service.Settings
 {
-    public class RabbitMqSetting
+    public class RabbitMqSettings
     {
         public string Host { get; init; }
     }

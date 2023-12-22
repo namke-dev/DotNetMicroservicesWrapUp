@@ -34,8 +34,8 @@ namespace Play.Catalog.Service
             {
                 x.UsingRabbitMq((context, configurator) =>
                 {
-                    var rabbitMqSetting = Configuration.GetSection(nameof(RabbitMqSetting)).Get<RabbitMqSetting>();
-                    configurator.Host(rabbitMqSetting.Host);
+                    var rabbitMqSettings = Configuration.GetSection(nameof(RabbitMqSettings)).Get<RabbitMqSettings>();
+                    configurator.Host(rabbitMqSettings.Host);
                     configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
                 });
             });
