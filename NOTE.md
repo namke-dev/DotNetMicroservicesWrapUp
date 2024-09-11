@@ -54,7 +54,7 @@ Structure app as a collection of services, each of them can be deploy independen
 
 ## 2. Service Communication
 ### Synchronous
-- Use REST or service communication
+- The service usually calls the exposed API of another service via HTTP/HTTPS or gRPC
 ### Asynchronous 
 - RabitMQ/ Apache Kafkka
 
@@ -64,7 +64,6 @@ Structure app as a collection of services, each of them can be deploy independen
 
 ## 4. others
 - Observability:
-    - Priority: Observability should be a key focus.
     - Components: Integrate logging, monitoring, and tracing.
     - Purpose: To gain visibility into system performance and quickly diagnose issues.
     - Tools: Use tools like the ELK stack (Elasticsearch, Logstash, Kibana), Prometheus, and Jaeger.
